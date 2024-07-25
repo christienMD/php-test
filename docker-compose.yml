@@ -1,0 +1,74 @@
+version: '2'
+services:
+
+    # Application container
+    php:
+        build: .
+        restart: unless-stopped
+        volumes:
+            - ./:/server/http
+        ports:
+            - "8080:80"
+        links:
+            - mysql
+            - redis
+        environment:
+            DEBUG: 'true'
+
+    mysql:
+        image: mysql:5.7
+        restart: unless-stopped
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpassword
+            MYSQL_DATABASE: phpTest
+            MYSQL_USER: phpTest
+            MYSQL_PASSWORD: phpTest
+
+    redis:
+        image: redis:alpine
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+
+
+
+
+
+
+# version: '2'
+# services:
+
+#     # Application container
+#     php:
+#         build: .
+#         restart: unless-stopped
+#         volumes:
+#             - ./:/server/http
+#         ports:
+#             - "8080:80"
+#             #- "443:443"
+#         links:
+#             - postgres
+#             - redis
+#         environment:
+#             DEBUG: 'true'
+
+#     postgres:
+#         image: onjin/alpine-postgres:9.5
+#         restart: unless-stopped
+#         ports:
+#             - "5432:5432"
+#         environment:
+#             LC_ALL: C.UTF-8
+#             POSTGRES_USER: phpTest
+#             POSTGRES_PASSWORD: phpTest
+#             POSTGRES_DB: phpTest
+
+#     redis:
+#         image: sickp/alpine-redis:3.2.2
+#         restart: unless-stopped
+#         ports:
+#             - "6379:6379"
+
