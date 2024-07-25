@@ -3,30 +3,23 @@
 use Slim\Factory\AppFactory;
 use DI\Container;
 
-require __DIR__ . '/vendor/autoload.php';
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-$config = require 'config.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
-$container->set('config', $config);
-
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
-// Add route middleware
+// middleware
 $app->addRoutingMiddleware();
-
-// Add error middleware
 $app->addErrorMiddleware(true, true, true);
 
-// Define app routes
-$app->get('/', function ($request, $response) {
-    $response->getBody()->write("Hello world!");
-    return $response;
-});
+// routes
+$app->get('/recipes', 'RecipeController:list');
+$app->post('/recipes', 'RecipeController:create');
+$app->get('/recipes/{id}', 'RecipeController:get');
+$app->put('/recipes/{id}', 'RecipeController:update');
+$app->delete('/recipes/{id}', 'RecipeController:delete');
+$app->post('/recipes/{id}/rating', 'RecipeController:rate');
+$app->get('/recipes/search', 'RecipeController:search');
 
-// Run app
 $app->run();
