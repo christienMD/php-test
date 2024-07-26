@@ -16,3 +16,8 @@ CREATE TABLE IF NOT EXISTS ratings (
 INSERT INTO recipes (name, prep_time, difficulty, vegetarian) VALUES
 ('Spaghetti Carbonara', '30 minutes', 2, false),
 ('Vegetable Stir Fry', '20 minutes', 1, true);
+
+-- Add some sample ratings
+INSERT INTO ratings (recipe_id, rating) VALUES
+(1, 4), (1, 5), (1, 4), (1, 3), (1, 5),  -- Ratings for Spaghetti Carbonara
+(2, 3), (2, 4), (2, 5), (2, 4), (2, 3);  -- Ratings for Vegetable Stir Fry

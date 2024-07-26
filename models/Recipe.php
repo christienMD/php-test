@@ -12,6 +12,8 @@ class Recipe
     public $difficulty;
     public $vegetarian;
     public $ratings = [];
+    public $average_rating;
+    public $rating_count;
 
     // constructor with db connection
     public function __construct($db)
@@ -77,12 +79,12 @@ class Recipe
     public function read_single()
     {
         $query = "SELECT r.id, r.name, r.prep_time, r.difficulty, r.vegetarian, 
-                         AVG(rt.rating) as average_rating
-                  FROM " . $this->table . " r
-                  LEFT JOIN ratings rt ON r.id = rt.recipe_id
-                  WHERE r.id = ?
-                  GROUP BY r.id
-                  LIMIT 0,1";
+                     AVG(rt.rating) as average_rating, COUNT(rt.id) as rating_count
+              FROM " . $this->table . " r
+              LEFT JOIN ratings rt ON r.id = rt.recipe_id
+              WHERE r.id = ?
+              GROUP BY r.id
+              LIMIT 0,1";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);
@@ -95,7 +97,8 @@ class Recipe
             $this->prep_time = $row['prep_time'];
             $this->difficulty = $row['difficulty'];
             $this->vegetarian = $row['vegetarian'];
-            // $this->average_rating = $row['average_rating'];
+            $this->average_rating = $row['average_rating'];
+            $this->rating_count = $row['rating_count'];
             return true;
         }
         return false;
